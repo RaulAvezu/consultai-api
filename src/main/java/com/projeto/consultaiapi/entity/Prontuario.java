@@ -37,6 +37,11 @@ public class Prontuario {
         this.id = dto.id();
         this.dataRegistro = dto.dataRegistro();
         this.descricao = dto.descricao();
-        // paciente e profissional devem ser setados externamente porque vem só o ID no dto
+    }
+
+    public Prontuario(ProntuarioDto dto, Paciente paciente, Profissional profissional) {
+        this(dto);
+        this.paciente = paciente;
+        this.profissional = profissional;
     }
 }

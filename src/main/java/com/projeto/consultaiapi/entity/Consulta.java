@@ -42,4 +42,10 @@ public class Consulta {
         this.status = StatusConsulta.valueOf(dto.status());
         this.valor = dto.valor();
     }
+
+    public Consulta(ConsultaDto dto, Profissional profissional, Paciente paciente) {
+        this(dto);
+        this.profissional = profissional;
+        this.paciente = paciente;
+    }
 }

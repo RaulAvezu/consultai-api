@@ -39,4 +39,8 @@ public class Pagamento {
         this.status = StatusPagamento.valueOf(dto.status());
         // consulta deve ser setada externamente porque vem só o ID no dto
     }
+    public Pagamento(PagamentoDto dto, Consulta consulta) {
+        this(dto);
+        this.consulta = consulta;
+    }
 }
