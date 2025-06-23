@@ -4,6 +4,7 @@ import com.projeto.consultaiapi.dto.PacienteDto;
 import com.projeto.consultaiapi.dto.listagem.PacienteListagemDto;
 import com.projeto.consultaiapi.entity.Paciente;
 import com.projeto.consultaiapi.repository.PacienteRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class PacienteService {
     @Transactional
     public void deletarPaciente(Long id) {
         if (!pacienteRepository.existsById(id)) {
-            throw new RuntimeException("Paciente não encontrado");
+            throw new EntityNotFoundException("Paciente não encontrado");
         }
         pacienteRepository.deleteById(id);
     }
@@ -39,7 +40,7 @@ public class PacienteService {
     @Transactional
     public void atualizarPaciente(Long id, PacienteDto dto) {
         Paciente paciente = pacienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Paciente não encontrado"));
         paciente.setNome(dto.nome());
         paciente.setTelefone(dto.telefone());
         paciente.setEmail(dto.email());

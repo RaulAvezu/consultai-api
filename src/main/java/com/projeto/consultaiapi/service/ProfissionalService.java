@@ -4,6 +4,7 @@ import com.projeto.consultaiapi.dto.ProfissionalDto;
 import com.projeto.consultaiapi.dto.listagem.ProfissionalListagemDto;
 import com.projeto.consultaiapi.entity.Profissional;
 import com.projeto.consultaiapi.repository.ProfissionalRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,7 @@ public class ProfissionalService {
     @Transactional
     public void deletarProfissional(Long id) {
         if (!profissionalRepository.existsById(id)) {
-            throw new RuntimeException("Profissional não encontrado");
+            throw new EntityNotFoundException("Profissional não encontrado");
         }
         profissionalRepository.deleteById(id);
     }

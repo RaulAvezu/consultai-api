@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class ProfissionalController {
     private ProfissionalService profissionalService;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public void cadastrarProfissional(@RequestBody @Valid ProfissionalDto profissionalDto) {
         profissionalService.cadastrarProfissional(profissionalDto);
     }

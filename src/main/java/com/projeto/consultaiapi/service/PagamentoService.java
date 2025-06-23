@@ -8,6 +8,7 @@ import com.projeto.consultaiapi.entity.StatusConsulta;
 import com.projeto.consultaiapi.entity.StatusPagamento;
 import com.projeto.consultaiapi.repository.ConsultaRepository;
 import com.projeto.consultaiapi.repository.PagamentoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class PagamentoService {
     @Transactional
     public void registrarPagamento(PagamentoDto dto) {
         var consulta = consultaRepository.findById(dto.consultaId())
-                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException("Consulta não encontrada"));
 
         pagamentoRepository.save(new Pagamento(dto, consulta));
     }
@@ -35,7 +36,7 @@ public class PagamentoService {
     @Transactional
     public void deletarPagamento(Long id) {
         if (!pagamentoRepository.existsById(id)) {
-            throw new RuntimeException("Pagamento não encontrado");
+            throw new EntityNotFoundException("Pagamento não encontrado");
         }
         pagamentoRepository.deleteById(id);
     }
@@ -50,7 +51,7 @@ public class PagamentoService {
     @Transactional
     public void atualizarPagamento(Long id, PagamentoDto dto) {
         Pagamento pagamento = pagamentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Pagamento não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Pagamento não encontrado"));
 
         pagamento.setValor(dto.valor());
         pagamento.setStatus(StatusPagamento.valueOf(dto.status().toUpperCase()));
@@ -58,7 +59,7 @@ public class PagamentoService {
 
         // Buscar a Consulta no banco e associar
         Consulta consulta = consultaRepository.findById(dto.consultaId())
-                .orElseThrow(() -> new RuntimeException("Consulta não encontrada"));
+                .orElseThrow(() -> new EntityNotFoundException("Consulta não encontrada"));
 
         pagamento.setConsulta(consulta);
 

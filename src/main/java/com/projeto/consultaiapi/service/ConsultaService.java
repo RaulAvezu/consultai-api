@@ -9,6 +9,7 @@ import com.projeto.consultaiapi.entity.StatusConsulta;
 import com.projeto.consultaiapi.repository.ConsultaRepository;
 import com.projeto.consultaiapi.repository.PacienteRepository;
 import com.projeto.consultaiapi.repository.ProfissionalRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,13 +31,13 @@ public class ConsultaService {
     @Transactional
     public void agendarConsulta(ConsultaDto dto) {
         if (dto.dataHora() == null || dto.profissionalId() == null || dto.pacienteId() == null) {
-            throw new IllegalArgumentException("Dados da consulta inválidos");
+            throw new EntityNotFoundException("Dados da consulta inválidos");
         }
 
         var profissional = profissionalRepository.findById(dto.profissionalId())
-                .orElseThrow(() -> new RuntimeException("Profissional não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Profissional não encontrado"));
         var paciente = pacienteRepository.findById(dto.pacienteId())
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Paciente não encontrado"));
 
         consultaRepository.save(new Consulta(dto, profissional, paciente));
     }
@@ -44,7 +45,7 @@ public class ConsultaService {
     @Transactional
     public void deletarConsulta(Long id) {
         if (!consultaRepository.existsById(id)) {
-            throw new RuntimeException("Consulta não encontrada");
+            throw new EntityNotFoundException("Consulta não encontrada");
         }
         consultaRepository.deleteById(id);
     }
@@ -66,9 +67,9 @@ public class ConsultaService {
         consulta.setStatus(StatusConsulta.valueOf(dto.status().toUpperCase()));
 
         Paciente paciente = pacienteRepository.findById(dto.pacienteId())
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Paciente não encontrado"));
         Profissional profissional = profissionalRepository.findById(dto.profissionalId())
-                .orElseThrow(() -> new RuntimeException("Profissional não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Profissional não encontrado"));
 
         consulta.setPaciente(paciente);
         consulta.setProfissional(profissional);
